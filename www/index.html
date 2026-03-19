@@ -48,6 +48,27 @@
       </div>
       <div id="player-rows" role="list" aria-label="Players"></div>
 
+      <!-- Match format -->
+      <div class="format-row">
+        <label class="format-label" for="best-of-select">Format</label>
+        <select id="best-of-select" class="format-select">
+          <option value="1">Best of 1 leg</option>
+          <option value="3">Best of 3 legs</option>
+          <option value="5">Best of 5 legs</option>
+          <option value="7">Best of 7 legs</option>
+          <option value="9">Best of 9 legs</option>
+        </select>
+      </div>
+
+      <div class="format-row" id="sets-row" hidden>
+        <label class="format-label" for="sets-select">Sets</label>
+        <select id="sets-select" class="format-select">
+          <option value="off">No sets</option>
+          <option value="3">Best of 3 sets</option>
+          <option value="5">Best of 5 sets</option>
+        </select>
+      </div>
+
       <!-- Validation errors -->
       <ul
         id="setup-errors"

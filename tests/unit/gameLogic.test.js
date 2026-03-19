@@ -20,6 +20,8 @@ import {
   denyWin,
   resetGame,
   validateThrowScore,
+  startNextLeg,
+  getPlayerStats,
 } from '../../www/js/game.js';
 
 // ---------------------------------------------------------------------------
@@ -316,6 +318,124 @@ describe('resetGame', () => {
 // ---------------------------------------------------------------------------
 // Edge cases
 // ---------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------
+// Multi-leg / sets
+// ---------------------------------------------------------------------------
+
+describe('multi-leg confirmWin', () => {
+  function setupBestOf3() {
+    return initGame(
+      [{ name: 'Alice', startScore: 501 }, { name: 'Bob', startScore: 501 }],
+      { bestOfLegs: 3 }
+    );
+  }
+
+  function winLeg(playerIndex) {
+    const s = getState();
+    s.players[playerIndex].currentScore = 40;
+    s.currentPlayerIndex = playerIndex;
+    saveState(s);
+    applyThrow(40);
+    return confirmWin();
+  }
+
+  it('winning first leg does not end match (best of 3)', () => {
+    setupBestOf3();
+    const state = winLeg(0);
+    expect(state.gameOver).toBe(false);
+    expect(state.legOver).toBe(true);
+    expect(state.legWinnerId).toBe(0);
+    expect(state.players[0].legsWon).toBe(1);
+  });
+
+  it('winning two legs ends match (best of 3)', () => {
+    setupBestOf3();
+    winLeg(0);           // Alice wins leg 1
+    startNextLeg();
+    const state = winLeg(0); // Alice wins leg 2 → match won
+    expect(state.gameOver).toBe(true);
+    expect(state.matchWinnerId).toBe(0);
+    expect(state.winnerId).toBe(0);
+  });
+
+  it('startNextLeg resets scores and increments leg counter', () => {
+    setupBestOf3();
+    winLeg(0);
+    const state = startNextLeg();
+    expect(state.players[0].currentScore).toBe(501);
+    expect(state.players[1].currentScore).toBe(501);
+    expect(state.currentLeg).toBe(2);
+    expect(state.legOver).toBe(false);
+  });
+
+  it('startNextLeg resets currentPlayerIndex to 0', () => {
+    setupBestOf3();
+    winLeg(0);
+    const state = startNextLeg();
+    expect(state.currentPlayerIndex).toBe(0);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// getPlayerStats
+// ---------------------------------------------------------------------------
+
+describe('getPlayerStats', () => {
+  it('returns zero stats for a fresh game', () => {
+    const state = initGame([{ name: 'Alice', startScore: 501 }]);
+    const s = getPlayerStats(0, state);
+    expect(s.avg).toBe(0);
+    expect(s.oneEighties).toBe(0);
+    expect(s.onePlus).toBe(0);
+    expect(s.highestCheckout).toBe(0);
+    expect(s.bestLeg).toBeNull();
+    expect(s.legsWon).toBe(0);
+    expect(s.setsWon).toBe(0);
+  });
+
+  it('tracks 180 correctly', () => {
+    initGame([{ name: 'Alice', startScore: 501 }]);
+    applyThrow(180);
+    const state = getState();
+    const s = getPlayerStats(0, state);
+    expect(s.oneEighties).toBe(1);
+    expect(s.onePlus).toBe(1);
+  });
+
+  it('calculates average per turn', () => {
+    initGame([{ name: 'Alice', startScore: 501 }]);
+    applyThrow(60);  // turn 1
+    applyThrow(80);  // turn 2 (it wraps back to player 0 with single player)
+    const state = getState();
+    const s = getPlayerStats(0, state);
+    expect(s.avg).toBe(70);
+  });
+
+  it('records highest checkout on confirmWin', () => {
+    initGame([{ name: 'Alice', startScore: 501 }]);
+    const s = getState();
+    s.players[0].currentScore = 36;
+    saveState(s);
+    applyThrow(36);
+    confirmWin();
+    const state = getState();
+    const stats = getPlayerStats(0, state);
+    expect(stats.highestCheckout).toBe(36);
+    expect(stats.legsWon).toBe(1);
+  });
+
+  it('does not count busts in totalScored', () => {
+    initGame([{ name: 'Alice', startScore: 501 }]);
+    const s = getState();
+    s.players[0].currentScore = 10;
+    saveState(s);
+    applyThrow(20); // bust
+    const state = getState();
+    const stats = getPlayerStats(0, state);
+    expect(stats.avg).toBe(0); // bust not counted in totalScored
+  });
+});
 
 describe('applyThrow — edge cases', () => {
   it('single player game: turn stays at 0 (only 1 player)', () => {

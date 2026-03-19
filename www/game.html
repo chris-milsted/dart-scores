@@ -24,7 +24,10 @@
 
   <main class="game-main">
 
-    <!-- ── Scoreboard ─────────────────────────────────────── -->
+    <!-- ── Leg / Sets progress bar ────────────────────────────── -->
+    <div id="leg-set-bar" class="leg-set-bar" hidden aria-live="polite"></div>
+
+    <!-- ── Scoreboard ─────────────────────────────────────────── -->
     <section class="scoreboard-section" aria-label="Scoreboard">
       <table class="scoreboard-table">
         <thead>
@@ -38,7 +41,7 @@
       </table>
     </section>
 
-    <!-- ── Current player turn ────────────────────────────── -->
+    <!-- ── Current player turn ────────────────────────────────── -->
     <section class="current-turn-section" aria-label="Current turn">
       <div class="turn-player-name" id="current-player-name" aria-live="polite"></div>
       <div class="turn-score" id="current-score" aria-live="polite"></div>
@@ -60,6 +63,9 @@
           >
           <button type="submit" class="btn-primary btn-submit">Submit</button>
         </div>
+        <button type="button" id="open-calc-btn" class="btn-calc-trigger">
+          Rich needs help with maths
+        </button>
       </form>
 
       <div
@@ -71,7 +77,7 @@
       ></div>
     </section>
 
-    <!-- ── Checkout suggestions ───────────────────────────── -->
+    <!-- ── Checkout suggestions ───────────────────────────────── -->
     <section
       id="checkout-section"
       class="checkout-section"
@@ -83,9 +89,27 @@
       <div id="checkout-suggestions" class="checkout-grid"></div>
     </section>
 
+    <!-- ── Statistics ─────────────────────────────────────────── -->
+    <details class="collapsible-section" id="stats-section">
+      <summary class="collapsible-heading">Player Statistics</summary>
+      <div id="stats-content" class="collapsible-content"></div>
+    </details>
+
+    <!-- ── Current leg throw history ──────────────────────────── -->
+    <details class="collapsible-section" id="throw-history-section">
+      <summary class="collapsible-heading">This Leg</summary>
+      <div id="throw-history-content" class="collapsible-content"></div>
+    </details>
+
+    <!-- ── Completed legs history ─────────────────────────────── -->
+    <section id="match-history-section" hidden>
+      <h2 class="subsection-heading">Completed Legs</h2>
+      <div id="match-history-content"></div>
+    </section>
+
   </main>
 
-  <!-- ── Restart confirmation dialog ───────────────────────── -->
+  <!-- ── Restart confirmation dialog ───────────────────────────── -->
   <dialog id="restart-dialog" class="modal" aria-labelledby="restart-dialog-title">
     <h2 id="restart-dialog-title" class="modal-title">Restart Game?</h2>
     <p class="modal-body">All progress will be lost. This cannot be undone.</p>
@@ -95,7 +119,7 @@
     </div>
   </dialog>
 
-  <!-- ── Double-out confirmation dialog ────────────────────── -->
+  <!-- ── Double-out confirmation dialog ────────────────────────── -->
   <dialog id="double-out-dialog" class="modal" aria-labelledby="double-out-title">
     <h2 id="double-out-title" class="modal-title">Checkout!</h2>
     <p class="modal-body">
@@ -108,12 +132,62 @@
     </div>
   </dialog>
 
-  <!-- ── Winner dialog ─────────────────────────────────────── -->
+  <!-- ── Leg win dialog (match continues) ───────────────────────── -->
+  <dialog id="leg-win-dialog" class="modal" aria-labelledby="leg-win-title">
+    <h2 id="leg-win-title" class="modal-title">Leg Complete!</h2>
+    <p id="leg-win-message" class="modal-body winner-message"></p>
+    <div id="leg-score-summary" class="leg-score-summary"></div>
+    <div class="modal-actions">
+      <button type="button" id="next-leg-btn" class="btn-primary btn-large">Next Leg</button>
+    </div>
+  </dialog>
+
+  <!-- ── Winner dialog ─────────────────────────────────────────── -->
   <dialog id="winner-dialog" class="modal modal--winner" aria-labelledby="winner-title">
-    <h2 id="winner-title" class="modal-title">Game Over!</h2>
+    <h2 id="winner-title" class="modal-title">Match Won!</h2>
     <p id="winner-message" class="modal-body winner-message"></p>
     <div class="modal-actions">
       <button type="button" id="play-again" class="btn-primary btn-large">Play Again</button>
+    </div>
+  </dialog>
+
+  <!-- ── Dart Score Calculator ─────────────────────────────────── -->
+  <dialog id="dart-calc-dialog" class="modal modal--calc" aria-labelledby="calc-title">
+    <div class="calc-header">
+      <h2 id="calc-title" class="modal-title">Score Calculator</h2>
+      <button type="button" id="calc-close-btn" class="btn-icon-close" aria-label="Close calculator">&#10005;</button>
+    </div>
+
+    <div id="calc-indicator" class="calc-indicator" aria-live="polite">Dart 1 of 3</div>
+
+    <div class="calc-multiplier" role="group" aria-label="Multiplier">
+      <button type="button" class="calc-mult-btn active" data-mult="1" aria-pressed="true">Single</button>
+      <button type="button" class="calc-mult-btn" data-mult="2" aria-pressed="false">Double</button>
+      <button type="button" class="calc-mult-btn" data-mult="3" aria-pressed="false">Treble</button>
+    </div>
+
+    <div id="calc-grid" class="calc-grid" role="group" aria-label="Dart segments">
+      <!-- Built by dartCalc.js -->
+    </div>
+
+    <button type="button" id="calc-miss-btn" class="calc-miss-btn">Miss (0)</button>
+
+    <div class="calc-dart-summary" aria-live="polite">
+      <div class="calc-dart-slots">
+        <span id="calc-dart-1" class="calc-dart-slot calc-dart-active">&#8212;</span>
+        <span class="calc-dart-sep">+</span>
+        <span id="calc-dart-2" class="calc-dart-slot">&#8212;</span>
+        <span class="calc-dart-sep">+</span>
+        <span id="calc-dart-3" class="calc-dart-slot">&#8212;</span>
+        <span class="calc-dart-sep">=</span>
+        <span id="calc-total" class="calc-total">0</span>
+      </div>
+    </div>
+
+    <div class="calc-actions">
+      <button type="button" id="calc-undo-btn" class="btn-secondary" disabled>Undo</button>
+      <button type="button" id="calc-reset-btn" class="btn-secondary">Reset</button>
+      <button type="button" id="calc-use-btn" class="btn-primary">Use Score</button>
     </div>
   </dialog>
 

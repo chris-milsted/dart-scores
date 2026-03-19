@@ -566,3 +566,421 @@ dialog::backdrop {
 @media (prefers-reduced-motion: reduce) {
   button { transition: none; }
 }
+
+/* ── Match format selectors (setup page) ─────────────────────────────────── */
+.format-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.65rem 1rem;
+  margin-bottom: 0.6rem;
+}
+
+.format-label {
+  flex: 1;
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+.format-select {
+  background: var(--bg-card);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.45rem 0.75rem;
+  font-size: 0.95rem;
+  font-family: inherit;
+  min-height: var(--touch-min);
+  cursor: pointer;
+}
+.format-select:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-color: var(--accent);
+}
+
+/* ── Leg / sets progress bar ─────────────────────────────────────────────── */
+.leg-set-bar {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.9rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.6rem;
+  font-size: 0.9rem;
+}
+
+.bar-item { color: var(--text-muted); }
+.bar-sep  { color: var(--border); }
+
+.bar-player { font-weight: 600; }
+.bar-active { color: var(--accent); }
+
+/* ── Score calculator trigger button ─────────────────────────────────────── */
+.btn-calc-trigger {
+  width: 100%;
+  margin-top: 0.6rem;
+  background: var(--bg-card);
+  color: var(--text-muted);
+  border: 1px dashed var(--border);
+  font-size: 0.9rem;
+  font-weight: 600;
+  min-height: var(--touch-min);
+  border-radius: var(--radius-sm);
+}
+.btn-calc-trigger:hover { border-color: var(--accent); color: var(--accent); background: var(--bg-card); }
+
+/* ── Collapsible sections (details/summary) ──────────────────────────────── */
+.collapsible-section {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.collapsible-heading {
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.collapsible-heading::-webkit-details-marker { display: none; }
+.collapsible-heading::before {
+  content: '›';
+  font-size: 1.1rem;
+  transition: transform 0.15s;
+  color: var(--text-muted);
+}
+details[open] .collapsible-heading::before { transform: rotate(90deg); }
+.collapsible-heading:hover { color: var(--text); }
+
+.collapsible-content {
+  padding: 0 0.75rem 0.75rem;
+  overflow-x: auto;
+}
+
+/* ── Stats table ─────────────────────────────────────────────────────────── */
+.stats-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+.stats-table th {
+  background: var(--bg-card);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.45rem 0.6rem;
+  text-align: left;
+  white-space: nowrap;
+}
+.stats-table td {
+  padding: 0.55rem 0.6rem;
+  border-top: 1px solid var(--border);
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── History tables ──────────────────────────────────────────────────────── */
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+.history-table th {
+  background: var(--bg-card);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.4rem 0.6rem;
+  text-align: left;
+}
+.history-table td {
+  padding: 0.45rem 0.6rem;
+  border-top: 1px solid var(--border);
+  font-variant-numeric: tabular-nums;
+}
+.history-bust td { color: var(--warning); }
+.history-score   { font-weight: 700; }
+.flag-bust       { color: var(--warning); font-size: 0.8rem; font-weight: 600; }
+.flag-checkout   { color: var(--accent);  font-size: 0.8rem; font-weight: 600; }
+.history-empty   { color: var(--text-muted); font-size: 0.85rem; padding: 0.5rem 0; }
+.history-leg-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin: 0.75rem 0 0.35rem;
+}
+
+/* ── Completed legs section ──────────────────────────────────────────────── */
+.subsection-heading {
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  padding: 0.75rem 0 0.5rem;
+}
+
+#match-history-section {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0 0.75rem 0.75rem;
+  overflow-x: auto;
+}
+
+/* ── Leg win dialog extras ───────────────────────────────────────────────── */
+.leg-score-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+.leg-score-player {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.35rem 0.75rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+.leg-score-winner {
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* ── 180 badge ───────────────────────────────────────────────────────────── */
+.badge-180 {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  background: var(--warning);
+  color: #000;
+  font-weight: 900;
+  font-size: 1.4rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-sm);
+  pointer-events: none;
+  animation: badge-pop 1.4s ease forwards;
+  z-index: 5;
+}
+
+/* ── Dart calc dialog ────────────────────────────────────────────────────── */
+.modal--calc {
+  max-width: 480px;
+  width: calc(100vw - 1rem);
+  padding: 1rem;
+}
+
+.calc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+.calc-header .modal-title { margin: 0; }
+
+.btn-icon-close {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  width: 36px;
+  height: 36px;
+  min-height: 36px;
+  padding: 0;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+.btn-icon-close:hover { color: var(--text); border-color: var(--text-muted); }
+
+.calc-indicator {
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  margin-bottom: 0.65rem;
+  text-align: center;
+}
+
+.calc-multiplier {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+.calc-mult-btn {
+  flex: 1;
+  background: var(--bg-card);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  min-height: 44px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+}
+.calc-mult-btn.active {
+  background: var(--accent);
+  color: #000;
+  border-color: var(--accent);
+}
+.calc-mult-btn:hover:not(.active):not(:disabled) { border-color: var(--accent); color: var(--accent); }
+
+.calc-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.35rem;
+  margin-bottom: 0.5rem;
+}
+.calc-seg-btn {
+  background: var(--bg-card);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  min-height: 48px;
+  padding: 0.3rem 0.2rem;
+  font-size: 1rem;
+  font-weight: 700;
+}
+.calc-seg-btn:hover:not(:disabled) { background: var(--border); border-color: var(--accent); }
+.calc-seg-btn:disabled { opacity: 0.3; }
+
+/* Bull buttons span 2 cols */
+.calc-bull-btn {
+  grid-column: span 2;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--warning);
+  border-color: rgba(245,166,35,0.4);
+}
+.calc-bull-btn:hover:not(:disabled) { background: rgba(245,166,35,0.1); }
+
+.calc-miss-btn {
+  width: 100%;
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px dashed var(--border);
+  min-height: 40px;
+  font-size: 0.85rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 0.75rem;
+}
+.calc-miss-btn:hover:not(:disabled) { border-color: var(--danger); color: var(--danger); }
+.calc-miss-btn:disabled { opacity: 0.3; }
+
+.calc-dart-summary {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.75rem;
+  margin-bottom: 0.75rem;
+}
+.calc-dart-slots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.calc-dart-slot {
+  background: var(--bg-surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.3rem 0.65rem;
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  min-width: 2.5rem;
+  text-align: center;
+  transition: border-color 0.15s;
+}
+.calc-dart-active  { border-color: var(--accent); color: var(--accent); }
+.calc-dart-filled  { color: var(--text); border-color: var(--border); }
+.calc-dart-sep     { color: var(--text-muted); font-size: 1rem; }
+.calc-total {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--accent);
+  min-width: 3rem;
+  text-align: center;
+}
+
+.calc-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.calc-actions .btn-primary { flex: 2; }
+.calc-actions .btn-secondary { flex: 1; }
+
+/* ── Animations ──────────────────────────────────────────────────────────── */
+
+/* Bust: red shake on score display */
+@keyframes anim-bust {
+  0%   { transform: translateX(0);     color: var(--danger); }
+  20%  { transform: translateX(-8px);  color: var(--danger); }
+  40%  { transform: translateX( 8px);  color: var(--danger); }
+  60%  { transform: translateX(-5px);  color: var(--danger); }
+  80%  { transform: translateX( 5px);  color: var(--danger); }
+  100% { transform: translateX(0);     color: var(--accent); }
+}
+.anim-bust { animation: anim-bust 0.45s ease; }
+
+/* Leg win: green pulse on winning scoreboard row */
+@keyframes anim-legwin {
+  0%   { background: var(--active-row); }
+  40%  { background: rgba(0, 200, 150, 0.28); }
+  100% { background: var(--winner-row); }
+}
+.anim-legwin { animation: anim-legwin 0.7s ease forwards; }
+
+/* 180 badge pop and fade */
+@keyframes badge-pop {
+  0%   { transform: scale(0.5) translateY(10px); opacity: 0; }
+  25%  { transform: scale(1.15) translateY(0);    opacity: 1; }
+  60%  { transform: scale(1.0);                   opacity: 1; }
+  100% { transform: scale(1.0) translateY(-10px); opacity: 0; }
+}
+
+/* Confetti fall */
+@keyframes confetti-fall {
+  0%   { transform: translateY(-20px) rotate(0deg);    opacity: 1; }
+  100% { transform: translateY(110vh) rotate(720deg);  opacity: 0; }
+}
+.confetti-particle {
+  position: fixed;
+  border-radius: 2px;
+  animation: confetti-fall linear forwards;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ── current-turn-section needs position:relative for badge ──────────────── */
+.current-turn-section { position: relative; }
+
