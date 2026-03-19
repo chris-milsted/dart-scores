@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Dart Tracker - Game</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="game-page">
+
+  <header class="site-header">
+    <div class="header-inner">
+      <span class="logo-icon" aria-hidden="true">&#9675;</span>
+      <h1 class="site-title">Dart Tracker</h1>
+    </div>
+    <button
+      type="button"
+      id="restart-btn"
+      class="btn-restart"
+      aria-label="Restart game"
+    >Restart</button>
+  </header>
+
+  <main class="game-main">
+
+    <!-- ── Scoreboard ─────────────────────────────────────── -->
+    <section class="scoreboard-section" aria-label="Scoreboard">
+      <table class="scoreboard-table">
+        <thead>
+          <tr>
+            <th scope="col">Player</th>
+            <th scope="col">Score</th>
+            <th scope="col">Start</th>
+          </tr>
+        </thead>
+        <tbody id="scoreboard-body"></tbody>
+      </table>
+    </section>
+
+    <!-- ── Current player turn ────────────────────────────── -->
+    <section class="current-turn-section" aria-label="Current turn">
+      <div class="turn-player-name" id="current-player-name" aria-live="polite"></div>
+      <div class="turn-score" id="current-score" aria-live="polite"></div>
+
+      <form id="throw-form" class="throw-form" novalidate>
+        <label for="throw-input" class="throw-label">Score this turn (0 – 180)</label>
+        <div class="throw-input-row">
+          <input
+            type="number"
+            id="throw-input"
+            class="throw-input"
+            min="0"
+            max="180"
+            step="1"
+            placeholder="0"
+            inputmode="numeric"
+            autocomplete="off"
+            required
+          >
+          <button type="submit" class="btn-primary btn-submit">Submit</button>
+        </div>
+      </form>
+
+      <div
+        id="throw-result"
+        class="throw-result"
+        role="status"
+        aria-live="polite"
+        hidden
+      ></div>
+    </section>
+
+    <!-- ── Checkout suggestions ───────────────────────────── -->
+    <section
+      id="checkout-section"
+      class="checkout-section"
+      aria-label="Checkout options"
+      hidden
+    >
+      <h2 class="checkout-heading">Checkout Options</h2>
+      <p class="checkout-sub">You can finish this turn! Suggested routes:</p>
+      <div id="checkout-suggestions" class="checkout-grid"></div>
+    </section>
+
+  </main>
+
+  <!-- ── Restart confirmation dialog ───────────────────────── -->
+  <dialog id="restart-dialog" class="modal" aria-labelledby="restart-dialog-title">
+    <h2 id="restart-dialog-title" class="modal-title">Restart Game?</h2>
+    <p class="modal-body">All progress will be lost. This cannot be undone.</p>
+    <div class="modal-actions">
+      <button type="button" id="cancel-restart" class="btn-secondary">Cancel</button>
+      <button type="button" id="confirm-restart" class="btn-danger">Yes, Restart</button>
+    </div>
+  </dialog>
+
+  <!-- ── Double-out confirmation dialog ────────────────────── -->
+  <dialog id="double-out-dialog" class="modal" aria-labelledby="double-out-title">
+    <h2 id="double-out-title" class="modal-title">Checkout!</h2>
+    <p class="modal-body">
+      <strong id="double-out-player"></strong> reached zero!
+      <br>Did your final dart land on a <strong>double</strong> or the <strong>bullseye</strong>?
+    </p>
+    <div class="modal-actions">
+      <button type="button" id="deny-double-out" class="btn-secondary">No, I missed</button>
+      <button type="button" id="confirm-double-out" class="btn-primary">Yes, I finished!</button>
+    </div>
+  </dialog>
+
+  <!-- ── Winner dialog ─────────────────────────────────────── -->
+  <dialog id="winner-dialog" class="modal modal--winner" aria-labelledby="winner-title">
+    <h2 id="winner-title" class="modal-title">Game Over!</h2>
+    <p id="winner-message" class="modal-body winner-message"></p>
+    <div class="modal-actions">
+      <button type="button" id="play-again" class="btn-primary btn-large">Play Again</button>
+    </div>
+  </dialog>
+
+  <script type="module" src="/js/ui.js"></script>
+</body>
+</html>

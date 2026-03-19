@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Dart Tracker - New Game</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="setup-page">
+
+  <header class="site-header">
+    <div class="header-inner">
+      <span class="logo-icon" aria-hidden="true">&#9675;</span>
+      <h1 class="site-title">Dart Tracker</h1>
+    </div>
+  </header>
+
+  <main class="setup-main">
+    <h2 class="section-heading">New Game Setup</h2>
+
+    <!-- Player count controls -->
+    <div class="player-count-row">
+      <span class="count-label">Players</span>
+      <div class="count-controls" role="group" aria-label="Number of players">
+        <button
+          type="button"
+          id="decrease-players"
+          class="count-btn"
+          aria-label="Decrease player count"
+          disabled
+        >&#8722;</button>
+        <span id="player-count-display" class="count-display" aria-live="polite">2</span>
+        <button
+          type="button"
+          id="increase-players"
+          class="count-btn"
+          aria-label="Increase player count"
+        >&#43;</button>
+      </div>
+    </div>
+
+    <!-- Player rows are injected here by setup.js -->
+    <form id="setup-form" novalidate>
+      <div class="player-rows-header">
+        <span class="col-name">Name</span>
+        <span class="col-score">Starting Score</span>
+      </div>
+      <div id="player-rows" role="list" aria-label="Players"></div>
+
+      <!-- Validation errors -->
+      <ul
+        id="setup-errors"
+        class="error-list"
+        role="alert"
+        aria-live="assertive"
+        hidden
+      ></ul>
+
+      <button type="submit" class="btn-primary btn-large" id="start-game-btn">
+        Start Game
+      </button>
+    </form>
+  </main>
+
+  <script type="module" src="/js/setup.js"></script>
+</body>
+</html>
