@@ -34,8 +34,17 @@ RUN rm -f /etc/nginx/conf.d/default.conf
 COPY nginx.conf        /etc/nginx/conf.d/dart-tracker.conf
 COPY www/              /usr/share/nginx/html/
 
-# Ensure the html directory is owned by the nginx user.
-RUN chown -R nginx:nginx /usr/share/nginx/html
+# Pre-create all directories nginx needs to write to at runtime and give
+# ownership to the nginx user. Without this, the non-root process cannot
+# create the client_temp and other cache subdirectories on startup.
+RUN chown -R nginx:nginx \
+      /usr/share/nginx/html \
+      /var/cache/nginx \
+      /var/log/nginx \
+    && chmod -R 755 /var/cache/nginx \
+    # nginx.conf references a pid file; make sure the parent dir is writable too.
+    && touch /var/run/nginx.pid \
+    && chown nginx:nginx /var/run/nginx.pid
 
 # Expose the internal port (mapped to host port 80 via `podman run -p 80:8080`).
 EXPOSE 8080
