@@ -5,25 +5,31 @@ IMAGE   := dart-tracker:latest
 CONTAINER := dart-tracker
 TEST_PORT := 8080
 
-.PHONY: build run run-hardened stop test test-unit test-security test-integration clean
+.PHONY: build run run-hardened stop stop-test test test-unit test-security test-integration clean
 
 ## build: Build the Podman container image
 build:
 	podman build -t $(IMAGE) .
 
-## run: Run the container (maps to host port 80)
+## run: Build and run the container in the background (maps to host port 80)
 run: build
-	podman run --rm -p 80:8080 --name $(CONTAINER) $(IMAGE)
+	podman run --rm -d -p 80:8080 --name $(CONTAINER) $(IMAGE)
+	@echo "Dart Tracker running at http://localhost — 'make stop' to stop it"
 
-## run-hardened: Run with read-only filesystem (most secure)
+## stop: Stop the running container
+stop:
+	podman stop $(CONTAINER) || true
+
+## run-hardened: Run with read-only filesystem (most secure) in the background
 run-hardened: build
-	podman run --rm \
+	podman run --rm -d \
 		--read-only \
 		--tmpfs /var/cache/nginx:rw,size=10m \
 		--tmpfs /var/run:rw,size=1m \
 		-p 80:8080 \
 		--name $(CONTAINER) \
 		$(IMAGE)
+	@echo "Dart Tracker (hardened) running at http://localhost — 'make stop' to stop it"
 
 ## run-test: Start container for testing on port 8080
 run-test: build
